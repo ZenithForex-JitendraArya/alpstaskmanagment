@@ -1,0 +1,37 @@
+.topbar {
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+.dropdown-menu {
+    border: none;
+    min-width: 220px;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    transition: all 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+#dropdown-user {
+    border: none;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+#dropdown-user:after {
+    display: none;
+}
+
+#dropdown-user:hover {
+    background-color: #f8f9fa !important; }

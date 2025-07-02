@@ -1,0 +1,85 @@
+---
+title: "Alps CRM — Full‑Stack Assignment"
+---
+
+# 🧨 Alps CRM — Full‑Stack Assignment
+
+## 📄 Overview  
+Build a mini **CRM platform** for a startup named **Alps**, enabling management of **clients**, **projects**, and **tickets** with role‑based access.
+
+---
+
+## 🚧 Objectives  
+- **Simulate real-world scope** with various entities & relationships  
+- **Test backend skills**: SQL, ORM, auth, role handling  
+- **Test frontend skills**: React/Next, forms, UI/UX  
+- **Flag weak candidates** on error handling, edge cases, design patterns  
+
+---
+
+## 🧩 Features & Requirements
+
+### 🔐 Authentication & Roles  
+- ✅ Register / login (JWT or session-based)  
+- ✅ Roles: `Admin`, `Client`  
+- ✅ Admin: full access  
+- ✅ Client: view/edit own tickets, view projects  
+i have creaeted one more table for user 
+so people can  register as client or user.
+
+---
+***done
+### 👥 Clients Module  
+- CRUD clients (Admin only)  
+- Client profile page listing associated projects & tickets  
+
+---
+***done
+### 🛠 Projects Module  
+- Each project: `title`, `description`, `status` (`active`/`on-hold`/`completed`), start & end dates  
+- Admin can CRUD projects under any client  
+- Projects list view with filters + sorting  
+
+---
+***done
+### 🎟 Ticket Management  
+- Admin: create tickets for any project  
+- Ticket fields: `subject`, `details`, `priority`, `status`, `assignedTo`  
+- Clients: view own tickets, comment, change status (`open`/`pending`/`resolved`)
+
+---
+***pending
+### 📤 File Upload (Bonus)  
+- Upload files (PDF/image) to tickets  
+- Show download links/comments view  
+
+---
+
+### 📊 Dashboard (Bonus)  
+- Stats overview:  
+    - # clients  
+    - # active projects  
+    - # pending tickets  
+
+---
+
+## 🛰 Tech Stack
+
+- **Frontend**: React or Next.js (v13+ w/ App Router preferred)  
+- **Backend**: Node.js + Express.js  
+- **Database**: PostgreSQL or MySQL  
+- **Auth**: JWT or NextAuth  
+- **UI Framework**: TailwindCSS or Bootstrap  
+
+---
+
+## 📅 Timeline & Deliverables
+
+- **Deadline**: 2 days (48 hours)  
+- **Deliverables**:
+  - GitHub repo with clear README  
+  - Database schema dump  
+  - Live deployment (Vercel, Render or similar)  
+
+---
+

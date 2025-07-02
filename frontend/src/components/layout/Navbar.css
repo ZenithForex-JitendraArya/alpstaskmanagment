@@ -1,0 +1,26 @@
+/* Modal styling */
+.modal-content {
+    border: none;
+    border-radius: 8px;
+}
+
+.list-group-item {
+    padding: 12px 16px;
+    border-left: 0;
+    border-right: 0;
+}
+
+.list-group-item:first-child {
+    border-top: 0;
+}
+
+.list-group-item:last-child {
+    border-bottom: 0;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+.text-danger:hover {
+    background-color: rgba(220, 53, 69, 0.1); }
