@@ -80,7 +80,7 @@ const ProjectsList = ({ isAdmin = false, projects = [] }) => {
                                 <Row className="align-items-center">
                                     <Col md={6} className="mb-2 mb-md-0">
                                         <h4 className="mb-2 text-primary">{project.title}</h4>
-                                        <div className="d-flex flex-wrap gap-2">
+                                        {/* <div className="d-flex flex-wrap gap-2">
                                             <Badge bg="light" text="dark" className="d-flex align-items-center px-3 py-2">
                                                 <Person className="me-2" />
                                                 <span className="fw-bold">{project.client}</span>
@@ -89,7 +89,7 @@ const ProjectsList = ({ isAdmin = false, projects = [] }) => {
                                                 <Clock className="me-2" />
                                                 <span>{project.lastViewed}</span>
                                             </Badge>
-                                        </div>
+                                        </div> */}
                                     </Col>
                                     <Col md={6} className="d-flex justify-content-md-end mt-2 mt-md-0">
                                         <Button
