@@ -1,5 +1,6 @@
 const express = require('express');
-const { registerUser, loginUser } = require('../controllers/userController');
+const { registerUser, loginUser, getAllActiveUsers } = require('../controllers/userController');
+const { verifyToken } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 // Example controller — make it or adjust to yours
@@ -7,4 +8,6 @@ const router = express.Router();
 // console.log('register')
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+router.get('/', verifyToken, getAllActiveUsers);
+
 module.exports = router;

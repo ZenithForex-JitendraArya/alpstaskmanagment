@@ -1,7 +1,6 @@
-// controllers/projectController.js
-
+const { tickets } = require('../models');
 const { projects } = require("../models"); // adjust path if needed
-const { users } =require('../models')
+const { users } = require('../models')
 
 exports.createProject = async (req, res) => {
     try {
@@ -153,7 +152,7 @@ exports.editProject = async (req, res) => {
                 message: 'Forbidden: You are not the creator of this project.'
             });
         }
-        
+
 
         // ✅ Update fields only if provided
         if (projectName) project.title = projectName;
@@ -236,5 +235,123 @@ exports.deleteProject = async (req, res) => {
         });
     }
 };
+exports.getTicketsByProjectId = async (req, res) => {
+    try {
+        const { projectId } = req.params;
+        const userId = req.user?.user_id;
+        if (!userId) {
+            return res.status(401).json({
+                status: false,
+                message: 'Unauthorized: User info not found.',
+            });
+        }
+        // Optional: verify that this project belongs to the user
+        const project = await projects.findOne({
+            where: {
+                project_id: projectId,
+                user_id: userId
+            }
+        });
+        if (!project) {
+            return res.status(404).json({
+                status: false,
+                message: 'Project not found or you do not have access.',
+            });
+        }
+        const pendingTickets = await tickets.findAll({
+            where: {
+                project_id: projectId,
+                isActive: true,
+                status:"PENDING"
+            },
+            attributes: [
+                'ticket_id',
+                'subject',
+                'details',
+                'priority',
+                'status',
+                'assignedTo',
+                'project_id',
+                'createdAt',
+                'updatedAt'
+            ],
+            include: [
+                {
+                    model: users,
+                    as: 'assignee', // define an alias if you setup association
+                    attributes: ['name']
+                }
+            ],
+            order: [['createdAt', 'DESC']]
+        });
+        const openTickets = await tickets.findAll({
+            where: {
+                project_id: projectId,
+                isActive: true,
+                status: "OPEN"
+            },
+            attributes: [
+                'ticket_id',
+                'subject',
+                'details',
+                'priority',
+                'status',
+                'assignedTo',
+                'project_id',
+                'createdAt',
+                'updatedAt'
+            ],
+            include: [
+                {
+                    model: users,
+                    as: 'assignee', // define an alias if you setup association
+                    attributes: ['name']
+                }
+            ],
+            order: [['createdAt', 'DESC']]
+        });
+        const resolvedTickets = await tickets.findAll({
+            where: {
+                project_id: projectId,
+                isActive: true,
+                status: "RESOLVED"
+            },
+            attributes: [
+                'ticket_id',
+                'subject',
+                'details',
+                'priority',
+                'status',
+                'assignedTo',
+                'project_id',
+                'createdAt',
+                'updatedAt'
+            ],
+            include: [
+                {
+                    model: users,
+                    as: 'assignee', // define an alias if you setup association
+                    attributes: ['name']
+                }
+            ],
+            order: [['createdAt', 'DESC']]
+        });
+
+        res.status(200).json({
+            status: true,
+            message: 'Tickets fetched successfully.',
+            pendingTickets: pendingTickets,
+            openTickets: openTickets,
+            resolvedTickets: resolvedTickets
+        });
+
+    } catch (error) {
+        console.error('Error fetching tickets:', error);
+        res.status(500).json({
+            status: false,
+            message: 'Server error.'
+        });
+    }
+  };
 
 

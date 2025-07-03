@@ -121,3 +121,35 @@ exports.loginUser = async (req, res) => {
         });
     }
 };
+exports.getAllActiveUsers = async (req, res) => {
+    try {
+        // Optional: only admins can see all active users
+        console.log(req.user?.role)
+        if (req.user?.role !== 'ADMIN') {
+            return res.status(403).json({
+                status: false,
+                message: 'Forbidden: Only admins can view all active users.',
+            });
+        }
+
+        const activeUsers = await users.findAll({
+            // where: { isActive: true },
+            attributes: ['user_id', 'name', 'email', 'role', 'createdAt', 'updatedAt'],
+            order: [['createdAt', 'DESC']]
+        });
+
+        res.status(200).json({
+            status: true,
+            message: 'Active users fetched successfully.',
+            users: activeUsers
+        });
+
+    } catch (error) {
+        console.error('Error fetching active users:', error);
+        res.status(500).json({
+            status: false,
+            message: 'Server error.'
+        });
+    }
+};
+

@@ -25,6 +25,10 @@ const tickets = require('./Ticket');
 
 users.hasMany(projects, { foreignKey: 'user_id' });
 projects.belongsTo(users, { foreignKey: 'user_id' });
+tickets.belongsTo(users, {
+    foreignKey: 'assignedTo',
+    as: 'assignee'
+});
 
 
 module.exports = {

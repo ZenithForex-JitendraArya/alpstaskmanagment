@@ -1,11 +1,8 @@
 const express = require('express');
+const { verifyToken } = require('../middleware/authMiddleware');
+const { createTicket } = require('../controllers/ticketController');
 const router = express.Router();
 
-// Example controller imports
-// const { getTickets, createTicket, updateTicket, deleteTicket } = require('../controllers/ticketController');
-
-router.get('/', (req, res) => {
-    res.json({ message: 'tickets route works!' });
-});
+router.post('/create', verifyToken, createTicket);
 
 module.exports = router;

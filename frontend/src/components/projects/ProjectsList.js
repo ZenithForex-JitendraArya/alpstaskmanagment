@@ -3,39 +3,27 @@ import { Container, Row, Col, Card, ListGroup, Button, Badge } from 'react-boots
 import { PlusCircle, Link45deg, Clock, Person } from 'react-bootstrap-icons';
 import { getAllProjectApi } from '../../api/projectApi';
 import DialogModal from '../DialogModal';
+import { useNavigate } from 'react-router-dom';
 
-const ProjectsList = ({ isAdmin = false, projects = [] }) => {
+const ProjectsList = () => {
+    const isAdmin = sessionStorage.getItem('role') === 'ADMIN';
     const [onceRun, setOnceRun] = useState(false);
     const [modalShow, setModalShow] = useState(false);
     const [modalTitle, setModalTitle] = useState("");
     const [modalMessage, setModalMessage] = useState("");
     const [projectList, setProjectList] = useState([])
-    // Default projects if none provided
-    const defaultProjects = [
-        {
-            id: 1,
-            name: 'JitendraArya-Zenith',
-            client: 'Jitendra',
-            lastViewed: '2 hours ago',
-            links: 3
-        },
-        {
-            id: 2,
-            name: 'E-Commerce Platform',
-            client: 'Acme Corp',
-            lastViewed: '1 day ago',
-            links: 5
-        },
-    ];
+
+    const navigate=useNavigate();
     useEffect(() => {
         if (!onceRun) {
             console.log('Effect running');
             const fetchAllProject = async () => {
                 try {
                     const response = await getAllProjectApi();
+                    
                     setProjectList(response.projectsList)
                 } catch (error) {
-                    setModalTitle("Error ❌");
+                    setModalTitle("Error");
                     setModalMessage(error.message || "Login failed. Please try again.");
                     setModalShow(true);
                 }
@@ -47,10 +35,6 @@ const ProjectsList = ({ isAdmin = false, projects = [] }) => {
     const handleCloseModal=()=>{
         setModalShow(false)
     }
-
-
-    const displayProjects = projects.length ? projects : defaultProjects;
-
     return (
         <>
             <Container className="py-4" style={{ marginTop: '70px' }}>
@@ -95,6 +79,7 @@ const ProjectsList = ({ isAdmin = false, projects = [] }) => {
                                         <Button
                                             variant="outline-primary"
                                             className="d-flex align-items-center px-4 py-2"
+                                            onClick={() =>  navigate(`/project/${project.project_id}`)}
                                         >
                                             <Link45deg className="me-2" size={18} />
                                             <span>View Links ({project.links})</span>

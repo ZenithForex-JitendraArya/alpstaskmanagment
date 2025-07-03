@@ -27,7 +27,7 @@ app.use('/api/user', userRoutes);
 // app.use('/api/auth', authRoutes);
 // app.use('/api/clients', clientRoutes);
 app.use('/api/project', projectRoutes);
-app.use('/api/tickets', ticketRoutes);
+app.use('/api/ticket', ticketRoutes);
 app.use('/api/commets', commentRoutes
 
 );

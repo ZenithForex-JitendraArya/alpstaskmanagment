@@ -1,5 +1,5 @@
 import $ from "jquery";
-const token = localStorage.getItem('token');
+const token = sessionStorage.getItem('token');
 console.log('tokenn',token)
 const apiUrl = process.env.REACT_APP_API_URL;
 export async function createProjectApi(projectData) {
@@ -43,4 +43,24 @@ export async function getAllProjectApi() {
         $(".loader").hide();
     }
 }
+export async function getProjectByIdApi(projectId) {
+    $(".loader").show();
+    try {
+        const response = await fetch(`${apiUrl}/project/${projectId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        const data = await response.json();
+        if (!response.ok || data.status === false) {
+            throw new Error(data.message || "Something went wrong");
+        }
+        return data;
+    } finally {
+        $(".loader").hide();
+    }
+}
+
      

@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
 
+// ✅ Define the model
 const tickets = sequelize.define('tickets', {
     ticket_id: {
         type: DataTypes.INTEGER,
@@ -37,10 +38,12 @@ const tickets = sequelize.define('tickets', {
     },
     isActive: {
         type: DataTypes.BOOLEAN,
-        defaultValue: true
+        defaultValue: true,
+        field: 'is_active' 
     }
 }, {
     timestamps: true,
 });
 
+// ✅ Do NOT call belongsTo here directly — export only the model!
 module.exports = tickets;

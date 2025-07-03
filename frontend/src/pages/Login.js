@@ -32,13 +32,12 @@ export default function Login() {
             // Store token if available
             console.log("token", response.token)
             if (response.token) {
-                localStorage.setItem("token", response.token);
+                sessionStorage.setItem("token", response.token);
                 sessionStorage.setItem("userId", response.user.user_id)
                 sessionStorage.setItem("email", response.user.email)
                 sessionStorage.setItem("name", response.user.name)
                 sessionStorage.setItem("role", response.user.role)
                 sessionStorage.setItem("isLive", response.isLive)
-
             }
         } catch (error) {
             setModalTitle("Error ❌");

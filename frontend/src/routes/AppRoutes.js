@@ -9,6 +9,7 @@ import Register from '../pages/Register';
 import NotFound from '../pages/NotFound';
 import HomePage from '../pages/HomePage';
 import CreateProjectPage from '../pages/CreateProjectPage';
+import ProjectDetail from '../pages/ProjectDetails';
 
 function AppRoutes() {
     return (
@@ -18,6 +19,8 @@ function AppRoutes() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/dash" element={<Dashboard />} />
             <Route path="/create-project" element={<CreateProjectPage />} />
+            <Route path="/project/:projectId" element={<ProjectDetail />} />
+
 
             {/* Ensure PrivateRoute and MainLayout are properly composed */}
             <Route element={<PrivateRoute />}>
