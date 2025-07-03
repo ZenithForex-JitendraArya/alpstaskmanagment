@@ -22,6 +22,12 @@ app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
 console.log('in app.js')
+//testing
+app.use('/', (req, res) => {
+    res.send("testing");
+});
+  
+
 // Routes
 app.use('/api/user', userRoutes);
 // app.use('/api/auth', authRoutes);
