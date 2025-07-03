@@ -6,7 +6,7 @@ export async function createProjectApi(projectData) {
     $(".loader").show();
     try {
         // 👉 Get token from localStorage
-        const response = await fetch(apiUrl+"h/project/create", {
+        const response = await fetch(apiUrl+"/project/create", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

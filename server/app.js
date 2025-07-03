@@ -23,9 +23,9 @@ app.use(morgan('dev'));
 app.use(express.json());
 console.log('in app.js')
 //testing
-app.use('/', (req, res) => {
-    res.send("testing");
-});
+// app.use('/api', (req, res) => {
+//     res.send("testing");
+// });
   
 
 // Routes
