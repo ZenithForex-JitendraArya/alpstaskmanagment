@@ -2,11 +2,7 @@ import { useState } from 'react';
 import { Card, Button, Form, Row, Col, Badge } from 'react-bootstrap';
 import { deleteTicketApi, updateTicketApi } from '../api/ticketApi';
 
-const TicketCard = ({
-    ticket,
-    handleAddComment,
-    fetchTickets
-}) => {
+const TicketCard = ({ ticket, fetchTickets }) => {
     console.log(ticket)
     const isAdmin = sessionStorage.getItem('role') === 'ADMIN';
     const [isEditing, setIsEditing] = useState(false);
@@ -17,6 +13,8 @@ const TicketCard = ({
 
     const handleEditClick = () => {
         setIsEditing(true);
+    };
+    const handleAddComment = () => {
     };
 
     const handleSaveClick = async () => {
@@ -43,7 +41,7 @@ const TicketCard = ({
         }
     };
 
-    const handleDelete=async(ticket)=>{
+    const handleDelete = async (ticket) => {
         try {
             const result = await deleteTicketApi(ticket.ticket_id);
             if (result.status) {

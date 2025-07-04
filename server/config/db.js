@@ -20,10 +20,10 @@ dotenv.config();
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'postgres',
     dialectOptions: {
-        // ssl: {
-        //     require: true,
-        //     rejectUnauthorized: false, // Render uses self-signed cert
-        // },
+        ssl: {
+            require: true,
+            rejectUnauthorized: false, // Render uses self-signed cert
+        },
     },
     logging: false,
     define: {
