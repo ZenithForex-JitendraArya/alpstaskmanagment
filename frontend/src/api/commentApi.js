@@ -6,7 +6,8 @@ export async function getLastCommentApi(ticketId) {
     $(".loader").show();
     try {
         const token = sessionStorage.getItem('token');
-        const response = await fetch(`${apiUrl}/ticket/${ticketId}/last-comment`, {
+        const response = await fetch(`${apiUrl}/ticket/comment/${ticketId}`, {
+            method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
             },
