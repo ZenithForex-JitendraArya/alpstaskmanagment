@@ -1,66 +1,37 @@
-exports.addTicketComment = async (req, res) => {
+const comments = require('../models/comment');
+const tickets = require('../models/Ticket');
+const users = require('../models/User');
+
+exports.createComment = async (req, res) => {
     try {
         const { ticketId } = req.params;
-        const { commentText } = req.body;
-
-        if (!commentText) {
+        const { comment } = req.body;
+        const userId = req.user.user_id;
+        if (!comment || !comment.trim()) {
             return res.status(400).json({ status: false, message: 'Comment text is required.' });
         }
-
-        // Check ticket exists and is active
-        const ticket = await tickets.findOne({ where: { ticket_id: ticketId, isActive: true } });
+        // Check ticket exists:
+        const ticket = await tickets.findByPk(ticketId);
         if (!ticket) {
             return res.status(404).json({ status: false, message: 'Ticket not found.' });
         }
 
-        // Example: assume you have a `ticket_comments` model
-        const newComment = await ticket_comments.create({
+        // Create the comment:
+        const newComment = await comments.create({
             ticket_id: ticketId,
-            user_id: req.user.user_id, // client ID
-            comment_text: commentText
+            user_id: userId,
+            comment: comment.trim(),
         });
 
         res.status(201).json({
             status: true,
-            message: 'Comment added.',
-            comment: newComment
+            message: 'Comment added successfully.',
+            comment: newComment,
         });
     } catch (error) {
-        console.error('Add Comment Error:', error);
+        console.error('Create Comment Error:', error);
         res.status(500).json({ status: false, message: 'Server error.' });
     }
 };
-exports.updateTicketStatus = async (req, res) => {
-    try {
-        const { ticketId } = req.params;
-        const { status } = req.body;
 
-        const allowedStatuses = ['OPEN', 'PENDING', 'RESOLVED'];
-        if (!allowedStatuses.includes(status)) {
-            return res.status(400).json({ status: false, message: 'Invalid status.' });
-        }
-
-        const ticket = await tickets.findOne({ where: { ticket_id: ticketId, isActive: true } });
-        if (!ticket) {
-            return res.status(404).json({ status: false, message: 'Ticket not found.' });
-        }
-
-        // Optional: check ticket belongs to this client via project.client_id
-        const project = await projects.findByPk(ticket.project_id);
-        if (project.client_id !== req.user.user_id) {
-            return res.status(403).json({ status: false, message: 'Forbidden: This is not your ticket.' });
-        }
-
-        await ticket.update({ status });
-
-        res.status(200).json({
-            status: true,
-            message: 'Ticket status updated.',
-            ticket
-        });
-    } catch (error) {
-        console.error('Update Status Error:', error);
-        res.status(500).json({ status: false, message: 'Server error.' });
-    }
-};
     

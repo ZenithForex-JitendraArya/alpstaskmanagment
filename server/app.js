@@ -34,9 +34,7 @@ app.use('/api/user', userRoutes);
 // app.use('/api/clients', clientRoutes);
 app.use('/api/project', projectRoutes);
 app.use('/api/ticket', ticketRoutes);
-app.use('/api/commets', commentRoutes
-
-);
+app.use('/api/ticket/comment', commentRoutes);
 
 // Error handling middleware
 app.use(errorHandler);

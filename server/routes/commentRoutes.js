@@ -1,9 +1,7 @@
 const express = require('express');
 const { verifyToken } = require('../middleware/authMiddleware');
-const { createTicket, getClientTickets } = require('../controllers/ticketController');
+const { createComment } = require('../controllers/commentController');
 const router = express.Router();
 
-router.post('/create/:projectId', verifyToken, createTicket);
-router.get('/client', verifyToken, getClientTickets); // Client view
-
+router.post('/:ticketId', verifyToken, createComment);
 module.exports = router;

@@ -1,40 +1,46 @@
 'use strict';
 
 const { sequelize } = require('../config/db');
+
 const users = require('./User');
-// const clients = require('./Client');
 const projects = require('./Project');
 const tickets = require('./Ticket');
+const comments = require('./comment');
 
-
-//  clients —< projects
-// clients.hasMany(projects, { foreignKey: 'project_id' });
-// projects.belongsTo(clients, { foreignKey: 'client_id' });
-
-//   projects —< tickets
-// projects.hasMany(tickets, { foreignKey: 'ticket_id' });
-// tickets.belongsTo(projects, { foreignKey: 'project_id' });
-
-//   clients —< tickets
-// clients.hasMany(tickets, { foreignKey: 'ticket_id' });
-// tickets.belongsTo(clients, { foreignKey: 'client_id' });
-
-//   users —< tickets (assignedTo)
-// users.hasMany(tickets, { foreignKey: 'assignedTo' });
-// tickets.belongsTo(users, { as: 'Assignee', foreignKey: 'assignedTo' });
-
+// User–Project
 users.hasMany(projects, { foreignKey: 'user_id' });
 projects.belongsTo(users, { foreignKey: 'user_id' });
+
+// Ticket–User (assignee)
 tickets.belongsTo(users, {
     foreignKey: 'assignedTo',
     as: 'assignee'
 });
 
+// Ticket–Comment
+tickets.hasMany(comments, {
+    foreignKey: 'ticket_id',
+    as: 'comments'
+});
+comments.belongsTo(tickets, {
+    foreignKey: 'ticket_id',
+    as: 'ticket'
+});
+
+// User–Comment
+users.hasMany(comments, {
+    foreignKey: 'user_id',
+    as: 'comments'
+});
+comments.belongsTo(users, {
+    foreignKey: 'user_id',
+    as: 'author'
+});
 
 module.exports = {
     sequelize,
     users,
-    // clients,
     projects,
     tickets,
+    comments, 
 };

@@ -1,5 +1,6 @@
 start nodemone : npm run dev
 migration : npx sequelize-cli db:migrate
 drop : npx sequelize-cli db:migrate undo all
+for migration : npx sequelize-cli migration:generate --name table_name;
 
 

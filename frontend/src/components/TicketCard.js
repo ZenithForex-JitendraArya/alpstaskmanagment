@@ -1,39 +1,45 @@
-import { useState } from 'react';
-import { Card, Button, Form, Row, Col, Badge } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Card, Button, Form, Row, Col, Badge, InputGroup } from 'react-bootstrap';
 import { deleteTicketApi, updateTicketApi } from '../api/ticketApi';
+import { addCommentApi, getLastCommentApi } from '../api/commentApi';
 
 const TicketCard = ({ ticket, fetchTickets }) => {
-    console.log(ticket)
     const isAdmin = sessionStorage.getItem('role') === 'ADMIN';
-    const [isEditing, setIsEditing] = useState(false);
 
+    const [isEditing, setIsEditing] = useState(false);
     const [status, setStatus] = useState(ticket.status);
     const [priority, setPriority] = useState(ticket.priority);
     const [assignee, setAssignee] = useState(ticket.assignee?.name || '');
 
-    const handleEditClick = () => {
-        setIsEditing(true);
-    };
-    const handleAddComment = () => {
-    };
+    // COMMENT STATE
+    const [showCommentInput, setShowCommentInput] = useState(false);
+    const [commentText, setCommentText] = useState('');
+    const [lastComment, setLastComment] = useState('');
+
+    useEffect(() => {
+        const fetchLastComment = async () => {
+            try {
+                const response = await getLastCommentApi(ticket.ticket_id);
+                if (response.status && response.comment) {
+                    setLastComment(response.comment);
+                }
+            } catch (error) {
+                console.error('Failed to fetch last comment:', error);
+            }
+        };
+        fetchLastComment();
+    }, [ticket.ticket_id]);
+
+    const handleEditClick = () => setIsEditing(true);
 
     const handleSaveClick = async () => {
-        const updatedTicket = {
-            status,
-            priority,
-            assignee
-        };
-
+        // handleSaveComment
+        const updatedTicket = { status, priority, assignee };
         try {
             const result = await updateTicketApi(ticket.ticket_id, updatedTicket);
             if (result.status) {
-                fetchTickets()
-                setStatus(result.status);
-                setPriority(result.priority);
-                setAssignee(result.assignee?.name || '');
+                fetchTickets();
             }
-            // ✅ If your API returns the updated ticket, update local state too:
-
             setIsEditing(false);
         } catch (error) {
             console.error('Error updating ticket:', error);
@@ -41,17 +47,36 @@ const TicketCard = ({ ticket, fetchTickets }) => {
         }
     };
 
-    const handleDelete = async (ticket) => {
+    const handleDelete = async () => {
         try {
             const result = await deleteTicketApi(ticket.ticket_id);
             if (result.status) {
-                fetchTickets()
+                fetchTickets();
             }
         } catch (error) {
-            console.error('Error updating ticket:', error);
-            alert('Failed to update ticket. Please try again.');
+            console.error('Error deleting ticket:', error);
+            alert('Failed to delete ticket. Please try again.');
         }
-    }
+    };
+
+    const handleAddCommentClick = () => {
+        setShowCommentInput(true);
+    };
+
+    const handleSaveComment = async () => {
+        if (!commentText.trim()) return;
+        try {
+            const response = await addCommentApi(ticket.ticket_id, commentText);
+            if (response.status) {
+                setLastComment(commentText);
+                setCommentText('');
+                setShowCommentInput(false);
+            }
+        } catch (error) {
+            console.error('Failed to add comment:', error);
+            alert('Could not save comment.');
+        }
+    };
 
     return (
         <Card className="mb-3 shadow-sm border-0">
@@ -68,14 +93,22 @@ const TicketCard = ({ ticket, fetchTickets }) => {
                     </Col>
                 </Row>
 
-                <Row className="mb-1 border-2">
-                    <strong>Description</strong>
+                <Row className="mb-2">
                     <Col>
+                        <strong>Description</strong>
                         <p className="small">{ticket.details}</p>
                     </Col>
                 </Row>
 
-                <Row className="mb-1">
+                {lastComment && (
+                    <Row className="mb-3">
+                        <h6 className="mb-2">Last Comment</h6>
+                        <Col>
+                            <p className="small mb-0">{lastComment}</p>
+                        </Col>
+                    </Row>
+                )}
+                <Row className="mb-2">
                     <Col md="auto">
                         <Form.Group>
                             <Form.Label className="small mb-1">Status</Form.Label>
@@ -122,52 +155,38 @@ const TicketCard = ({ ticket, fetchTickets }) => {
                         </Form.Group>
                     </Col>
                 </Row>
+                {showCommentInput && (
+                    <>
+                    <Row className="mb-3">
+                        <Col>
+                            <h6 className="mb-2">Add Comment</h6>
+                            <InputGroup className="mb-2">
+                                <Form.Control
+                                    placeholder="Write your comment..."
+                                    value={commentText}
+                                    onChange={(e) => setCommentText(e.target.value)}
+                                    size="sm"
+                                />
+                            </InputGroup>
+                        </Col>
+                    </Row>
+                    <Row>
 
-                {/* <Row className="mb-3">
-                    <Col>
-                        <Badge
-                            bg={
-                                priority === 'HIGH'
-                                    ? 'danger'
-                                    : priority === 'MEDIUM'
-                                        ? 'warning'
-                                        : 'success'
-                            }
-                            className="me-2"
-                        >
-                            Priority: {priority}
-                        </Badge>
-
-                        <Badge
-                            bg={
-                                status === 'OPEN'
-                                    ? 'info'
-                                    : status === 'PENDING'
-                                        ? 'warning'
-                                        : 'success'
-                            }
-                            className="me-2"
-                        >
-                            Status: {status}
-                        </Badge>
-
-                        <Badge bg="secondary">
-                            Assigned: {assignee || 'Unassigned'}
-                        </Badge>
-                    </Col>
-                </Row> */}
-
+                        <Col>
+                                <Button variant="success" size="sm" onClick={handleSaveComment}>
+                                    Save Comment
+                                </Button>
+                        </Col>
+                    </Row>
+                    </>
+                )}
                 <Row className="mb-3">
                     <Col className="d-flex gap-2 flex-wrap">
-                        <Button
-                            variant="outline-secondary"
-                            size="sm"
-                            onClick={() => handleAddComment(ticket)}
-                        >
-                            Add Comment
-                        </Button>
-
-
+                        {!showCommentInput && (
+                            <Button variant="outline-secondary" size="sm" onClick={handleAddCommentClick}>
+                                Add Comment
+                            </Button>
+                        )}
                     </Col>
                 </Row>
 
@@ -175,27 +194,15 @@ const TicketCard = ({ ticket, fetchTickets }) => {
                     <Row>
                         <Col className="d-flex gap-2">
                             {isEditing ? (
-                                <Button
-                                    variant="success"
-                                    size="sm"
-                                    onClick={handleSaveClick}
-                                >
+                                <Button variant="success" size="sm" onClick={handleSaveClick}>
                                     Save
                                 </Button>
                             ) : (
-                                <Button
-                                    variant="primary"
-                                    size="sm"
-                                    onClick={handleEditClick}
-                                >
+                                <Button variant="primary" size="sm" onClick={handleEditClick}>
                                     Edit
                                 </Button>
                             )}
-                            <Button
-                                variant="outline-danger"
-                                size="sm"
-                                onClick={() => handleDelete(ticket)}
-                            >
+                            <Button variant="outline-danger" size="sm" onClick={handleDelete}>
                                 Delete
                             </Button>
                         </Col>

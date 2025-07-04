@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import PrivateRoute from '../components/auth/PrivateRoute';
+// import PrivateRoute from '../components/auth/PrivateRoute';
 import MainLayout from '../components/layout/MainLayout';
 import Dashboard from '../pages/Dashboard';
 import Projects from '../pages/Projects';
@@ -14,23 +14,13 @@ import ProjectDetail from '../pages/ProjectDetails';
 function AppRoutes() {
     return (
         <Routes>
+            <Route path="/" element={<Login />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/dash" element={<Dashboard />} />
             <Route path="/create-project" element={<CreateProjectPage />} />
             <Route path="/project/:projectId" element={<ProjectDetail />} />
-
-
-            {/* Ensure PrivateRoute and MainLayout are properly composed */}
-            <Route element={<PrivateRoute />}>
-                <Route element={<MainLayout />}>
-                    <Route index element={<Dashboard />} />
-                    <Route path="projects" element={<Projects />} />
-                    <Route path="tickets" element={<Tickets />} />
-                </Route>
-            </Route>
-
             <Route path="*" element={<NotFound />} />
         </Routes>
     );
