@@ -1,7 +1,7 @@
 import $ from "jquery";
 const apiUrl = process.env.REACT_APP_API_URL;
-const token = sessionStorage.getItem('token');
-console.log(token)
+// const token = sessionStorage.getItem('token');
+// console.log(token)
 
 export async function registerUser(userData) {
     $(".loader").show(); // Show loader
@@ -40,6 +40,7 @@ export async function login(userData) {
 export async function getAllUserApi() {
     $(".loader").show(); // Show loader
     try {
+        const token = sessionStorage.getItem('token');
         const response = await fetch(apiUrl+"/user", {
             method: "GET",
             headers: {

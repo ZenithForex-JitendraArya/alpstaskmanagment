@@ -56,4 +56,54 @@ exports.getClientTickets = async (req, res) => {
         res.status(500).json({ status: false, message: 'Server error.' });
     }
 };
+exports.updateTicket = async (req, res) => {
+    try {
+        const ticketId = req.params.ticketId;
+        console.log(ticketId)
+        const { subject, details, priority, status, assignedTo, isActive } = req.body;
+        if (req.user.role.toLowerCase() !== 'admin') {
+            return res.status(403).json({ status: false, message: 'Only admin can update tickets.' });
+        }
+        const ticket = await tickets.findByPk(ticketId);
+        if (!ticket) {
+            return res.status(404).json({ status: false, message: 'Ticket not found.' });
+        }
+        // Update fields if provided
+        if (subject !== undefined) ticket.subject = subject;
+        if (details !== undefined) ticket.details = details;
+        if (priority !== undefined) ticket.priority = priority;
+        if (status !== undefined) ticket.status = status;
+        if (assignedTo !== undefined) ticket.assignedTo = assignedTo;
+        if (isActive !== undefined) ticket.isActive = isActive;
+        await ticket.save();
+        res.status(200).json({ status: true, message: 'Ticket updated.', ticket });
+    } catch (error) {
+        console.error('Update Ticket Error:', error);
+        res.status(500).json({ status: false, message: 'Server error.' });
+    }
+};
+exports.deleteTicket = async (req, res) => {
+    try {
+        const ticketId = req.params.ticketId;
+
+        if (req.user.role.toLowerCase() !== 'admin') {
+            return res.status(403).json({ status: false, message: 'Only admin can delete tickets.' });
+        }
+
+        const ticket = await tickets.findByPk(ticketId);
+
+        if (!ticket) {
+            return res.status(404).json({ status: false, message: 'Ticket not found.' });
+        }
+
+        ticket.isActive = false; // 👈 Soft delete
+        await ticket.save();
+
+        res.status(200).json({ status: true, message: 'Ticket deleted (soft delete).' });
+    } catch (error) {
+        console.error('Delete Ticket Error:', error);
+        res.status(500).json({ status: false, message: 'Server error.' });
+    }
+};
+  
   

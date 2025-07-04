@@ -1,11 +1,12 @@
 import $ from "jquery";
-const token = sessionStorage.getItem('token');
-console.log('tokenn',token)
+// const token = sessionStorage.getItem('token');
+// console.log('tokenn',token)
 const apiUrl = process.env.REACT_APP_API_URL;
 export async function createProjectApi(projectData) {
     $(".loader").show();
     try {
         // 👉 Get token from localStorage
+        const token = sessionStorage.getItem('token');
         const response = await fetch(apiUrl+"/project/create", {
             method: "POST",
             headers: {
@@ -27,6 +28,7 @@ export async function createProjectApi(projectData) {
 export async function getAllProjectApi() {
     $(".loader").show();
     try {
+        const token = sessionStorage.getItem('token');
         const response = await fetch(apiUrl +"/project/all", {
             method: "GET",
             headers: {
@@ -46,6 +48,7 @@ export async function getAllProjectApi() {
 export async function getProjectByIdApi(projectId) {
     $(".loader").show();
     try {
+        const token = sessionStorage.getItem('token');
         const response = await fetch(`${apiUrl}/project/${projectId}`, {
             method: "GET",
             headers: {
