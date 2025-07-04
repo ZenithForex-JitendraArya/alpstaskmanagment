@@ -6,7 +6,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
 export async function registerUser(userData) {
     $(".loader").show(); // Show loader
     try {
-        const response = await fetch("http://localhost:5000/api/user/register", {
+        const response = await fetch(apiUrl+"/user/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userData),
@@ -23,7 +23,7 @@ export async function registerUser(userData) {
 export async function login(userData) {
     $(".loader").show(); // Show loader
     try {
-        const response = await fetch("http://localhost:5000/api/user/login", {
+        const response = await fetch(apiUrl + "/user/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userData),
