@@ -12,6 +12,8 @@ const ProjectsList = () => {
     const [modalTitle, setModalTitle] = useState("");
     const [modalMessage, setModalMessage] = useState("");
     const [projectList, setProjectList] = useState([])
+    const [showCreateProj, setShowCreateProj] = useState(false)
+
 
     const navigate=useNavigate();
     useEffect(() => {
@@ -35,6 +37,11 @@ const ProjectsList = () => {
     const handleCloseModal=()=>{
         setModalShow(false)
     }
+    const createBtnHandler = () => {
+        console.log('navbar')
+        setShowCreateProj(true)
+        navigate("/create-project");
+    }
     return (
         <>
             <Container className="py-4" style={{ marginTop: '70px' }}>
@@ -47,7 +54,7 @@ const ProjectsList = () => {
                     </Col>
                     {isAdmin && (
                         <Col xs="auto">
-                            <Button variant="success" className="shadow-sm">
+                            <Button variant="success" className="shadow-sm" onClick={createBtnHandler}>
                                 <PlusCircle className="me-2" />
                                 New Project
                             </Button>

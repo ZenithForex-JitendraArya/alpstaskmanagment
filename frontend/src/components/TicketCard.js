@@ -28,7 +28,7 @@ const TicketCard = ({ ticket, fetchTickets }) => {
             }
         };
         fetchLastComment();
-    }, [ticket.ticket_id]);
+    }, [ticket]);
 
     const handleEditClick = () => setIsEditing(true);
 
